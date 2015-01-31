@@ -34,5 +34,13 @@ do ->
       body.size.y
     )
 
+  Keyboarder = () ->
+    keyState = {}
+    
+    window.onkeydown = (e) ->
+      keyState[e.keyCode] = true;
+    window.onkeyup = (e) ->
+      keyState[e.keyCode] = false;
+
   window.onload = ->
     new Game "screen"
