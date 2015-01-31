@@ -12,9 +12,10 @@ do ->
       tick()
 
     update: () ->
-      console.log "HI"
+      # console.log "HI"
 
-    draw: () ->
+    draw: (screen, gameSize) ->
+      screen.fillRect(30, 30, 40, 40)
 
   window.onload = ->
     new Game "screen"
