@@ -4,6 +4,9 @@ do ->
       canvas = document.getElementById(canvasId)
       screen = canvas.getContext('2d')
       gameSize = { x: canvas.width, y: canvas.height }
+
+      @bodies = [new Player(@, gameSize)]
+
       self = @
       tick = ->
         self.update()
@@ -12,10 +15,24 @@ do ->
       tick()
 
     update: () ->
-      # console.log "HI"
 
     draw: (screen, gameSize) ->
-      screen.fillRect(30, 30, 40, 40)
+      drawRect(screen, body) for body in @bodies
+
+  class Player
+    constructor: (@game, gameSize) ->
+      @size = { x: 15, y: 15 }
+      @center = { x: gameSize.x / 2, y: gameSize.y - @size.x }
+
+    update: ->
+
+  drawRect = (screen, body) ->
+    screen.fillRect(
+      body.center.x - body.size.x / 2,
+      body.center.y - body.size.y / 2,
+      body.size.x,
+      body.size.y
+    )
 
   window.onload = ->
     new Game "screen"
