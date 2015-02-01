@@ -15,6 +15,7 @@ do ->
       tick()
 
     update: () ->
+      body.update() for body in @bodies
 
     draw: (screen, gameSize) ->
       drawRect(screen, body) for body in @bodies
@@ -23,8 +24,27 @@ do ->
     constructor: (@game, gameSize) ->
       @size = { x: 15, y: 15 }
       @center = { x: gameSize.x / 2, y: gameSize.y - @size.x }
+      @keyboarder = new Keyboarder
 
     update: ->
+      if @keyboarder.isDown(@keyboarder.KEYS.LEFT)
+        @center.x -= 2
+      else if @keyboarder.isDown(@keyboarder.KEYS.RIGHT)
+        @center.x += 2
+
+  class Keyboarder
+    constructor: ->
+      keyState = {}
+
+      window.onkeydown = (e) ->
+        keyState[e.keyCode] = true;
+      window.onkeyup = (e) ->
+        keyState[e.keyCode] = false;
+
+      @isDown = (keyCode) ->
+        keyState[keyCode] is true
+
+      @KEYS = { LEFT: 37, RIGHT: 39, SPACE: 32 }
 
   drawRect = (screen, body) ->
     screen.fillRect(
@@ -33,14 +53,6 @@ do ->
       body.size.x,
       body.size.y
     )
-
-  Keyboarder = () ->
-    keyState = {}
-    
-    window.onkeydown = (e) ->
-      keyState[e.keyCode] = true;
-    window.onkeyup = (e) ->
-      keyState[e.keyCode] = false;
 
   window.onload = ->
     new Game "screen"
