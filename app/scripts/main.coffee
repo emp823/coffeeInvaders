@@ -6,6 +6,7 @@ do ->
       gameSize = { x: canvas.width, y: canvas.height }
 
       @bodies = createInvaders(@).concat(new Player(@, gameSize))
+      @shootSound = document.getElementById('shoot-sound')
 
       self = @
       tick = ->
@@ -29,6 +30,13 @@ do ->
     addBody: (body) ->
       @bodies.push body
 
+    invadersBelow: (invader) ->
+      @bodies.filter((b)->
+        b instanceof Invader and
+        Math.abs(invader.center.x - b.center.x) < b.size.x and
+        b.center.y > invader.center.y
+      ).length > 0
+
   class Player
     constructor: (@game, gameSize) ->
       @size = { x: 15, y: 15 }
@@ -47,6 +55,8 @@ do ->
           {x: 0, y: -6}
         )
         @game.addBody(bullet)
+        @game.shootSound.load()
+        @game.shootSound.play()
 
   class Invader
     constructor: (@game, @center) ->
@@ -59,7 +69,7 @@ do ->
       @center.x += @speedX
       @patrolX += @speedX
 
-      if Math.random() > 0.995
+      if Math.random() > 0.995 and !@game.invadersBelow(@)
         bullet = new Bullet(
           {x: @center.x, y: @center.y + @size.x - 2},
           {x: Math.random() - 0.5, y: 2}
@@ -104,6 +114,15 @@ do ->
       body.size.x,
       body.size.y
     )
+
+  loadSound = (url, callback) ->
+    loaded = ->
+      callback(sound)
+      sound.removeEventListener('canplaythrough', loaded)
+
+    sound = new Audio(url)
+    sound.addEventListener('canplaythrough', loaded)
+    sound.load()
 
   window.onload = ->
     new Game "screen"
