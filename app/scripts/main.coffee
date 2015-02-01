@@ -15,6 +15,11 @@ do ->
       tick()
 
     update: () ->
+      bodies = @bodies
+      notColliding = (b1) ->
+        bodies.filter((b2) -> colliding(b1, b2)).length is 0
+
+      @bodies = bodies.filter(notColliding)
       body.update() for body in @bodies
 
     draw: (screen, gameSize) ->
