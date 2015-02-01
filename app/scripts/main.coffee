@@ -18,6 +18,7 @@ do ->
       body.update() for body in @bodies
 
     draw: (screen, gameSize) ->
+      screen.clearRect(0, 0, gameSize.x, gameSize.y)
       drawRect(screen, body) for body in @bodies
 
   class Player
