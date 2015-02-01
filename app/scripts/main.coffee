@@ -53,17 +53,13 @@ do ->
 
   class Keyboarder
     constructor: ->
-      keyState = {}
+      @keyState = keyState = {}
+      window.onkeydown = (e) -> keyState[e.keyCode] = true
+      window.onkeyup = (e) -> keyState[e.keyCode] = false
 
-      window.onkeydown = (e) ->
-        keyState[e.keyCode] = true;
-      window.onkeyup = (e) ->
-        keyState[e.keyCode] = false;
+    isDown: (keyCode) -> @keyState[keyCode] is true
 
-      @isDown = (keyCode) ->
-        keyState[keyCode] is true
-
-      @KEYS = { LEFT: 37, RIGHT: 39, SPACE: 32 }
+    KEYS: { LEFT: 37, RIGHT: 39, SPACE: 32 }
 
   drawRect = (screen, body) ->
     screen.fillRect(
