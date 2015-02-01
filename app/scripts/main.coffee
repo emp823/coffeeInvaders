@@ -21,6 +21,9 @@ do ->
       screen.clearRect(0, 0, gameSize.x, gameSize.y)
       drawRect(screen, body) for body in @bodies
 
+    addBody: (body) ->
+      @bodies.push body
+
   class Player
     constructor: (@game, gameSize) ->
       @size = { x: 15, y: 15 }
@@ -32,6 +35,21 @@ do ->
         @center.x -= 2
       else if @keyboarder.isDown(@keyboarder.KEYS.RIGHT)
         @center.x += 2
+
+      if @keyboarder.isDown(@keyboarder.KEYS.SPACE)
+        bullet = new Bullet(
+          {x: @center.x, y: @center.y - @size.x - 2},
+          {x: 0, y: -6}
+        )
+        @game.addBody(bullet)
+
+  class Bullet
+    constructor: (@center, @velocity) ->
+      @size = { x: 3, y: 3 }
+
+    update: ->
+      @center.x += @velocity.x
+      @center.y += @velocity.y
 
   class Keyboarder
     constructor: ->
