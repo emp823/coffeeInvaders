@@ -73,12 +73,10 @@ do ->
     KEYS: { LEFT: 37, RIGHT: 39, SPACE: 32 }
 
   createInvaders = (game) ->
-    invaders = []
-    for num in [0..23]
-      x = 30 + (num % 8) * 30
-      y = 30 + (num % 3) * 30
-      invaders.push(new Invader(game, {x: x, y: y}))
-    invaders
+    (new Invader(
+      game,
+      {x: 30 + (num % 8) * 30, y: 30 + (num % 3) * 30}
+    ) for num in [0..23])
 
   drawRect = (screen, body) ->
     screen.fillRect(
