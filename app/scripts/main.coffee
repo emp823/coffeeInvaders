@@ -78,6 +78,13 @@ do ->
       {x: 30 + (num % 8) * 30, y: 30 + (num % 3) * 30}
     ) for num in [0..23])
 
+  colliding = (b1, b2) ->
+    !(b1 is b2 or
+      b1.center.x + b1.size.x / 2 <= b2.center.x - b2.size.x / 2 or
+      b1.center.y + b1.size.y / 2 <= b2.center.y - b2.size.y / 2 or
+      b1.center.x - b1.size.x / 2 >= b2.center.x + b2.size.x / 2 or
+      b1.center.y - b1.size.y / 2 >= b2.center.y + b2.size.y / 2)
+
   drawRect = (screen, body) ->
     screen.fillRect(
       body.center.x - body.size.x / 2,
