@@ -5,7 +5,7 @@ do ->
       screen = canvas.getContext('2d')
       gameSize = { x: canvas.width, y: canvas.height }
 
-      @bodies = [new Player(@, gameSize)]
+      @bodies = createInvaders(@).concat(new Player(@, gameSize))
 
       self = @
       tick = ->
@@ -43,6 +43,17 @@ do ->
         )
         @game.addBody(bullet)
 
+  class Invader
+    constructor: (@game, @center) ->
+      @size = {x: 15, y: 15}
+      @patrolX = 0
+      @speedX = 0.3
+
+    update: ->
+      if @patrolX < 0 or @patrolX > 40 then @speedX = -@speedX
+      @center.x += @speedX
+      @patrolX += @speedX
+
   class Bullet
     constructor: (@center, @velocity) ->
       @size = { x: 3, y: 3 }
@@ -60,6 +71,14 @@ do ->
     isDown: (keyCode) -> @keyState[keyCode] is true
 
     KEYS: { LEFT: 37, RIGHT: 39, SPACE: 32 }
+
+  createInvaders = (game) ->
+    invaders = []
+    for num in [0..23]
+      x = 30 + (num % 8) * 30
+      y = 30 + (num % 3) * 30
+      invaders.push(new Invader(game, {x: x, y: y}))
+    invaders
 
   drawRect = (screen, body) ->
     screen.fillRect(
