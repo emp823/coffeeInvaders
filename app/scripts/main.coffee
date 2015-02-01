@@ -59,6 +59,13 @@ do ->
       @center.x += @speedX
       @patrolX += @speedX
 
+      if Math.random() > 0.995
+        bullet = new Bullet(
+          {x: @center.x, y: @center.y + @size.x - 2},
+          {x: Math.random() - 0.5, y: 2}
+        )
+        @game.addBody(bullet)
+
   class Bullet
     constructor: (@center, @velocity) ->
       @size = { x: 3, y: 3 }
