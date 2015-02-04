@@ -17,10 +17,10 @@ do ->
 
     update: () ->
       bodies = @bodies
-      notColliding = (b1) ->
-        bodies.filter((b2) -> colliding(b1, b2)).length is 0
+      notColliding = (b1) -> bodies.filter((b2) -> colliding(b1, b2)).length is 0
+      inPlay = (b1) -> b1.center.y > 0 and b1.center.y < 300
 
-      @bodies = bodies.filter(notColliding)
+      @bodies = bodies.filter(notColliding).filter(inPlay)
       body.update() for body in @bodies
 
     draw: (screen, gameSize) ->
