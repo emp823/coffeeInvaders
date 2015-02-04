@@ -31,7 +31,7 @@ do ->
       @bodies.push body
 
     invadersBelow: (invader) ->
-      @bodies.filter((b)->
+      @bodies.filter((b) ->
         b instanceof Invader and
         Math.abs(invader.center.x - b.center.x) < b.size.x and
         b.center.y > invader.center.y
@@ -50,13 +50,16 @@ do ->
         @center.x += 2
 
       if @keyboarder.isDown(@keyboarder.KEYS.SPACE)
-        bullet = new Bullet(
-          {x: @center.x, y: @center.y - @size.x - 2},
-          {x: 0, y: -6}
-        )
-        @game.addBody(bullet)
-        @game.shootSound.load()
-        @game.shootSound.play()
+        @shoot()
+
+    shoot: ->
+      bullet = new Bullet(
+        {x: @center.x, y: @center.y - @size.x - 2},
+        {x: 0, y: -6}
+      )
+      @game.addBody(bullet)
+      @game.shootSound.load()
+      @game.shootSound.play()
 
   class Invader
     constructor: (@game, @center) ->
