@@ -8,10 +8,9 @@ do ->
       @bodies = createInvaders(@).concat(new Player(@, gameSize))
       @shootSound = document.getElementById('shoot-sound')
 
-      self = @
-      tick = ->
-        self.update()
-        self.draw(screen, gameSize)
+      tick = =>
+        @update()
+        @draw(screen, gameSize)
         requestAnimationFrame(tick)
       tick()
 
