@@ -41,6 +41,7 @@ do ->
       @size = { x: 15, y: 15 }
       @center = { x: gameSize.x / 2, y: gameSize.y - @size.x }
       @keyboarder = new Keyboarder
+      @color = 'black'
 
     update: ->
       if @keyboarder.isDown(@keyboarder.KEYS.LEFT)
@@ -65,6 +66,7 @@ do ->
       @size = {x: 15, y: 15}
       @patrolX = 0
       @speedX = 0.3
+      @color = 'black'
 
     update: ->
       if @patrolX < 0 or @patrolX > 40 then @speedX = -@speedX
@@ -72,7 +74,7 @@ do ->
       @patrolX += @speedX
 
       if Math.random() > 0.995 and !@game.invadersBelow(@)
-        bullet = new Bullet(
+        bullet = new InvaderBullet(
           {x: @center.x, y: @center.y + @size.x - 2},
           {x: Math.random() - 0.5, y: 2}
         )
@@ -81,10 +83,16 @@ do ->
   class Bullet
     constructor: (@center, @velocity) ->
       @size = { x: 3, y: 3 }
+      @color = 'red'
 
     update: ->
       @center.x += @velocity.x
       @center.y += @velocity.y
+
+  class InvaderBullet extends Bullet
+    constructor: ->
+      super
+      @color = 'green'
 
   class Keyboarder
     constructor: ->
@@ -110,6 +118,7 @@ do ->
       b1.center.y - b1.size.y / 2 >= b2.center.y + b2.size.y / 2)
 
   drawRect = (screen, body) ->
+    screen.fillStyle = body.color
     screen.fillRect(
       body.center.x - body.size.x / 2,
       body.center.y - body.size.y / 2,
