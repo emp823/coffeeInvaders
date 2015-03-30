@@ -105,10 +105,7 @@ do ->
     KEYS: { LEFT: 37, RIGHT: 39, SPACE: 32 }
 
   createInvaders = (game) ->
-    (new Invader(
-      game,
-      {x: 30 + (num % 8) * 30, y: 30 + (num % 3) * 30}
-    ) for num in [0..23])
+    (new Invader(game, {x: 30 + (num % 8) * 30, y: 30 + (num % 3) * 30}) for num in [0..23])
 
   colliding = (b1, b2) ->
     !(b1 is b2 or
