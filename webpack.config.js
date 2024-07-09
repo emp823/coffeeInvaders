@@ -1,5 +1,5 @@
 module.exports = {
-  // mode: "development || "production",
+  mode: "production",
   module: {
     rules: [
       {
@@ -15,5 +15,6 @@ module.exports = {
   output: {
     path: __dirname + "/dist/",
     filename: "main.js",
+    clean: true,
   },
 }
