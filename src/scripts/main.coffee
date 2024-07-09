@@ -14,17 +14,19 @@ do ->
         requestAnimationFrame(tick)
       tick()
 
-    update: () ->
+    update: ->
       bodies = @bodies
-      notColliding = (b1) -> bodies.filter((b2) -> colliding(b1, b2)).length is 0
+      notColliding = (b1) -> bodies.filter((b2) -> colliding(b1, b2)).length == 0
       inPlay = (b1) -> b1.center.y > 0 and b1.center.y < 300
 
       @bodies = bodies.filter(notColliding).filter(inPlay)
-      body.update() for body in @bodies
+      for body in @bodies
+        body.update()
 
     draw: (screen, gameSize) ->
       screen.clearRect(0, 0, gameSize.x, gameSize.y)
-      drawRect(screen, body) for body in @bodies
+      for body in @bodies
+        drawRect(screen, body)
 
     addBody: (body) ->
       @bodies.push body
@@ -73,7 +75,7 @@ do ->
       @center.x += @speedX
       @patrolX += @speedX
 
-      if Math.random() > 0.995 and !@game.invadersBelow(@)
+      if Math.random() > 0.995 and not @game.invadersBelow(@)
         bullet = new InvaderBullet(
           {x: @center.x, y: @center.y + @size.x - 2},
           {x: Math.random() - 0.5, y: 2}
@@ -81,7 +83,9 @@ do ->
         @game.addBody(bullet)
 
   class Bullet
-    constructor: (@center, @velocity) ->
+    constructor: (center, velocity) ->
+      @center = center
+      @velocity = velocity
       @size = { x: 3, y: 3 }
       @color = 'red'
 
@@ -90,17 +94,17 @@ do ->
       @center.y += @velocity.y
 
   class InvaderBullet extends Bullet
-    constructor: ->
-      super
+    constructor: (center, velocity) ->
+      super(center, velocity)
       @color = 'green'
 
   class Keyboarder
     constructor: ->
-      @keyState = keyState = {}
-      window.onkeydown = (e) -> keyState[e.keyCode] = true
-      window.onkeyup = (e) -> keyState[e.keyCode] = false
+      @keyState = {}
+      window.onkeydown = (e) => @keyState[e.keyCode] = true
+      window.onkeyup = (e) => @keyState[e.keyCode] = false
 
-    isDown: (keyCode) -> @keyState[keyCode] is true
+    isDown: (keyCode) -> @keyState[keyCode] == true
 
     KEYS: { LEFT: 37, RIGHT: 39, SPACE: 32 }
 
@@ -108,7 +112,7 @@ do ->
     (new Invader(game, {x: 30 + (num % 8) * 30, y: 30 + (num % 3) * 30}) for num in [0..23])
 
   colliding = (b1, b2) ->
-    !(b1 is b2 or
+    not (b1 == b2 or
       b1.center.x + b1.size.x / 2 <= b2.center.x - b2.size.x / 2 or
       b1.center.y + b1.size.y / 2 <= b2.center.y - b2.size.y / 2 or
       b1.center.x - b1.size.x / 2 >= b2.center.x + b2.size.x / 2 or
