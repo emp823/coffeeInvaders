@@ -1,19 +1,47 @@
 do ->
   class Game
     constructor: (canvasId) ->
-      canvas = document.getElementById(canvasId)
-      screen = canvas.getContext('2d')
-      gameSize = { x: canvas.width, y: canvas.height }
-
-      @bodies = createInvaders(@).concat(new Player(@, gameSize))
+      @canvas = document.getElementById(canvasId)
+      @screen = @canvas.getContext('2d')
+      @gameSize = { x: @canvas.width, y: @canvas.height }
+      @bodies = []
       @shootSound = document.getElementById('shoot-sound')
       @score = 0
+      @gameState = 'start'
+      @player = null
 
-      tick = =>
+      @initScreens()
+
+    initScreens: ->
+      document.getElementById('start-button').onclick = =>
+        @startGame()
+
+      document.getElementById('restart-button').onclick = =>
+        @startGame()
+
+    startGame: ->
+      @score = 0
+      @bodies = createInvaders(@).concat(@player = new Player(@, @gameSize))
+      @gameState = 'playing'
+      @showScreen('screen')
+      @tick()
+
+    endGame: ->
+      @gameState = 'gameover'
+      document.getElementById('final-score').innerText = "Score: #{@score}"
+      @showScreen('end-screen')
+
+    showScreen: (screenId) ->
+      document.getElementById('start-screen').style.display = 'none'
+      document.getElementById('screen').style.display = 'none'
+      document.getElementById('end-screen').style.display = 'none'
+      document.getElementById(screenId).style.display = 'block'
+
+    tick: =>
+      if @gameState == 'playing'
         @update()
-        @draw(screen, gameSize)
-        requestAnimationFrame(tick)
-      tick()
+        @draw(@screen, @gameSize)
+        requestAnimationFrame(@tick)
 
     update: ->
       bodies = @bodies
@@ -27,6 +55,9 @@ do ->
       for body in bodies
         if body instanceof Invader and not notColliding(body)
           @score += 10
+
+      if not @bodies.includes(@player)
+        @endGame()
 
     draw: (screen, gameSize) ->
       screen.clearRect(0, 0, gameSize.x, gameSize.y)
@@ -68,6 +99,10 @@ do ->
         @canShoot = false
       if @keyboarder.isUp(@keyboarder.KEYS.SPACE)
         @canShoot = true
+
+      for bullet in @game.bodies when bullet instanceof InvaderBullet
+        if colliding(bullet, this)
+          @game.bodies = @game.bodies.filter((b) -> b != this)
 
     shoot: ->
       bullet = new Bullet(
@@ -153,4 +188,5 @@ do ->
     sound.load()
 
   window.onload = ->
-    new Game "screen"
+    game = new Game "screen"
+    game.showScreen('start-screen')

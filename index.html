@@ -1,17 +1,29 @@
 <!DOCTYPE html>
 <html class="no-js">
-  <head>
-    <meta charset="utf-8" />
-    <title>Coffee Invaders</title>
-    <meta name="description" content="" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <link rel="stylesheet" href="src/styles/main.css" />
-  </head>
-  <body>
-    <audio id="shoot-sound" src="src/audio/shoot.mp3"></audio>
-    <canvas id="screen" width="310" height="310"></canvas>
 
-    <script src="dist/main.js"></script>
-  </body>
+<head>
+  <meta charset="utf-8" />
+  <title>Coffee Invaders</title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="src/styles/main.css" />
+</head>
+
+<body>
+  <div id="start-screen">
+    <h1>Coffee Invaders</h1>
+    <button id="start-button">Start Game</button>
+  </div>
+  <canvas id="screen" width="310" height="310"></canvas>
+  <div id="end-screen">
+    <h1>Game Over</h1>
+    <p id="final-score"></p>
+    <button id="restart-button">Play Again</button>
+  </div>
+  <audio id="shoot-sound" src="src/audio/shoot.mp3"></audio>
+
+  <script src="dist/main.js"></script>
+</body>
+
 </html>
