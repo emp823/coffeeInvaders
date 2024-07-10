@@ -7,6 +7,7 @@ do ->
 
       @bodies = createInvaders(@).concat(new Player(@, gameSize))
       @shootSound = document.getElementById('shoot-sound')
+      @score = 0
 
       tick = =>
         @update()
@@ -23,10 +24,20 @@ do ->
       for body in @bodies
         body.update()
 
+      for body in bodies
+        if body instanceof Invader and not notColliding(body)
+          @score += 10
+
     draw: (screen, gameSize) ->
       screen.clearRect(0, 0, gameSize.x, gameSize.y)
       for body in @bodies
         drawRect(screen, body)
+      @drawScore(screen)
+
+    drawScore: (screen) ->
+      screen.fillStyle = 'black'
+      screen.font = '20px Arial'
+      screen.fillText('Score: ' + @score, 10, 20)
 
     addBody: (body) ->
       @bodies.push body
