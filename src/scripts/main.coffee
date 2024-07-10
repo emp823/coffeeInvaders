@@ -55,6 +55,7 @@ do ->
       @center = { x: gameSize.x / 2, y: gameSize.y - @size.x }
       @keyboarder = new Keyboarder
       @color = 'black'
+      @canShoot = true
 
     update: ->
       if @keyboarder.isDown(@keyboarder.KEYS.LEFT)
@@ -62,8 +63,11 @@ do ->
       else if @keyboarder.isDown(@keyboarder.KEYS.RIGHT)
         @center.x += 2
 
-      if @keyboarder.isDown(@keyboarder.KEYS.SPACE)
+      if @keyboarder.isDown(@keyboarder.KEYS.SPACE) and @canShoot
         @shoot()
+        @canShoot = false
+      if @keyboarder.isUp(@keyboarder.KEYS.SPACE)
+        @canShoot = true
 
     shoot: ->
       bullet = new Bullet(
@@ -116,6 +120,7 @@ do ->
       window.onkeyup = (e) => @keyState[e.keyCode] = false
 
     isDown: (keyCode) -> @keyState[keyCode] == true
+    isUp: (keyCode) -> @keyState[keyCode] == false
 
     KEYS: { LEFT: 37, RIGHT: 39, SPACE: 32 }
 
