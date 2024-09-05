@@ -9,7 +9,7 @@
   "devDependencies": {
     "coffee-loader": "^5.0.0",
     "coffeescript": "^2.7.0",
-    "webpack": "^5.92.1",
+    "webpack": "^5.94.0",
     "webpack-cli": "^5.1.4"
   },
   "engines": {
